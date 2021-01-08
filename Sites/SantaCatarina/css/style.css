@@ -1,0 +1,712 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  background-color: #EEEEEE;
+
+
+}
+
+/* ------------ HEADER --------------*/
+.logo{
+  padding: 14px 30px;
+  width: 200px;
+  float: left;
+}
+
+
+.topnav{
+  text-align: right;
+}
+
+ul.topnav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #fff;
+
+}
+
+ul.topnav li {
+  display: inline-block;
+}
+
+ul.topnav li a {
+    display: block;
+    color: grey;
+    padding: 40px 16px;
+    text-decoration: none;
+
+    font-family: sans-serif;
+}
+
+ul.topnav li a:hover {
+  background-color: black;
+  color: white;
+}
+
+ul.topnav li a.active {color: black; font-weight: bold;}
+
+ul.topnav li a.active:hover {background-color: white; font-weight: bold;}
+
+
+.banner{
+
+  text-align: center;
+  padding: 100px;
+
+  color: white;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  background-attachment:fixed;
+  background-image:url("../img/aurora3.jpeg");
+  background-repeat: no-repeat;
+}
+
+
+/*-----------------------------------------------------------------------*/
+
+
+/*------------------------ HOME ----------------------------------------------*/
+
+.bannerHome{
+
+  text-align: center;
+  padding: 100px;
+  color: #F8F8F8;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  background-attachment:fixed;
+  background-image:url("../img/purpleSky2.jpg");
+  background-position:bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  font-size: 120%;
+}
+
+
+.containerHome1{
+  display: flex;
+  justify-content: center;
+  background-color: #232323;
+  color: #D6D6D6;
+  padding: 40px;
+}
+
+.containerHome1 p{
+  width: 1000px;
+}
+
+
+.homeImg{
+  height: 300px;
+  padding: 10px 10px 10px 10px;
+  -webkit-transform: scale(1);
+	transform: scale(1);
+	-webkit-transition: .3s ease-in-out;
+	transition: .3s ease-in-out;
+}
+
+
+
+.imgDiv{
+  padding-top: 100px;
+  padding-bottom: 100px;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  background-color: white;
+}
+
+.homeImg:hover{
+  -webkit-transform: scale(1.3);
+	transform: scale(1.3);
+}
+
+.imgAndButton{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.datainfo{
+  display: flex;
+  align-items: center;
+}
+.dataDes {
+  text-align: center;
+}
+
+.WeatherIMG{
+  padding-left: 50%;
+  padding-top: 50%;
+  background-color: black;
+
+
+  background-image:url("../img/weatherStation4.jpeg");
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
+  background-attachment:fixed;
+}
+
+.WeatherIMG p{
+
+}
+
+.websiteImport{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.titleWeatherHome{
+  text-align: center;
+  padding-top: 30px;
+}
+
+
+/*-----------------------------------------------------------------------*/
+/*--------------------------IMPORT---------------------------------------------*/
+
+
+.bannerImport{
+
+  text-align: center;
+  padding: 100px;
+  color: #F8F8F8;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  background-attachment:fixed;
+  background-image:url("../img/water_lily.jpg");
+  background-position:bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  font-size: 120%;
+}
+
+.CountainerImportForm{
+  margin: 0 auto;
+  display: flex;
+  padding: 180px;
+  background-color: white;
+  width: 280px;
+  text-align: center;
+
+}
+
+/*-----------------------------------------------------------------------*/
+
+
+
+
+
+
+
+/*---------------------- WHO WE ARE -------------------------------------------------*/
+
+.bannerProject{
+
+  text-align: center;
+  padding: 100px;
+  color: #F8F8F8;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  background-attachment:fixed;
+  background-image:url("../img/work.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-size: 120%;
+}
+
+
+.containerProject1{
+  display: flex;
+  justify-content: center;
+  background-color: #232323;
+  color: #D6D6D6;
+  padding: 90px;
+}
+
+.projectDescription{
+  width: 1000px;
+}
+
+.weatherStationImg{
+  height: 600px;
+}
+
+
+
+
+.WWADiv p{
+width: 400px;
+}
+
+.WWADiv div{
+padding: 10px 10px 10px 10px;
+}
+
+.WWADiv .containerWWA1 .containerWWA2 .containerWWA3 .containerWWA4{
+
+  border: 2mm ridge rgba(170, 50, 220, .6);
+}
+
+
+
+.containerWWA1{
+  background-color: white;
+  margin-top: 8px;
+  margin-left: 8px;
+  margin-right: 8px;
+  box-shadow: 3px 3px rgba(35, 35, 35, 1);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  /*border: 4mm solid rgba(35, 35, 35, 0.8);*/
+
+
+}
+
+.containerWWA2{
+  background-color: white;
+  margin-top: 8px;
+  margin-left: 8px;
+  margin-right: 8px;
+  box-shadow: 3px 3px rgba(35, 35, 35, 1);
+
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row-reverse;
+  justify-content: space-around;
+}
+
+.containerWWA3{
+  background-color: white;
+  margin-top: 8px;
+  margin-left: 8px;
+  margin-right: 8px;
+  box-shadow: 3px 3px rgba(35, 35, 35, 1);
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.containerWWA4{
+  background-color: white;
+  margin-top: 8px;
+  margin-left: 8px;
+  margin-right: 8px;
+  box-shadow: 3px 3px rgba(35, 35, 35, 1);
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row-reverse;
+  justify-content: space-around;
+}
+.ProfilImg{
+  height: 400px;
+}
+
+
+/*------------------DELETE -----------------------------------------------------*/
+
+.bannerDelete{
+
+  text-align: center;
+  padding: 100px;
+  color: #F8F8F8;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  background-attachment:fixed;
+  background-image:url("../img/rainbackground.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  font-size: 120%;
+}
+
+.CountainerDeleteForm{
+  margin: 0 auto;
+  display: flex;
+  padding: 180px;
+  background-color: white;
+  width: 600px;
+  text-align: center;
+
+}
+
+.nope{
+  color: red;
+}
+
+.confirmDeletePopup{
+  position: fixed;
+  top: 150px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  border: 1px  solid black;
+  display: none;
+
+}
+
+
+/*-----------------------------------------------------------------------*/
+
+
+/*-----------------------------------------------------------------------*/
+
+
+.websiteImport{
+
+  padding: 10% 10% 10% 10%;
+}
+
+
+/*---------------------FOOTER--------------------------------------------------*/
+
+.FooterPannel{
+  padding-top: 40px;
+  background-color: #232323;
+  position:none;
+  bottom: 0;
+  width:100%;
+  height: 200px;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 51px;
+}
+
+ul.botnav{
+  list-style-type: none;
+
+}
+ul.botnav li a{
+   text-decoration: none;
+   color: white;
+}
+
+
+.Fmail{
+  color: white;
+}
+
+/*-------------------------  EXPORT ----------------------------------------------*/
+
+
+.bannerExport{
+
+  text-align: center;
+  padding: 100px;
+  color: white;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  background-attachment:fixed;
+  background-image: url("../img/rocks.jpg");
+  background-position:bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+
+  font-size: 120%;
+
+
+
+}
+
+.Description{
+  display: flex;
+  justify-content: center;
+  background-color: #232323;
+  color: #D6D6D6;
+  padding: 50px;
+}
+
+
+
+
+
+
+
+
+.ContainerDataForm{
+    background-position: center center;
+    width: 40%;
+    box-shadow: 0 0 1px 0 rgba(0,0,0,0.5);
+    background: #fff;
+    padding: 20px;
+    margin: 3% auto;
+    text-align: left;
+}
+
+.titleData{
+  text-align: center;
+  background-color: yellow;
+}
+
+
+
+.containerDataInfo {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.containerDataInfo label {
+  display: block;
+  position: relative;
+  margin: 1px;
+  padding: 5px 5px 5px 5px;
+  border: 3px solid #fff;
+  border-radius: 10px;
+  color: #fff;
+  background-color: #BBB;
+  /*box-shadow: 0 0 20px rgba(0, 0, 0, .2);*/
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color .2s, box-shadow .2s;
+}
+
+.containerDataInfo input{
+  position: absolute;
+  left: -9999px;
+}
+
+.containerDataInfo input:checked + label{
+  background-color: #2979ff;
+}
+
+.inputNameFile{
+  width: 420px;
+  height: 25px;
+}
+
+.more-Filters{
+  display: none;
+}
+
+
+#how-other:checked ~ .more-Filters{
+  display: block;
+}
+
+
+.btn-validate
+{
+  width: 300px;
+  height: 50px;
+  margin: 10px;
+}
+
+.validateContainer{
+  text-align: center;
+}
+
+
+
+.dataForm .FormDesc {
+ font-weight: bold;
+}
+
+.dataForm .days p{
+  position: relative;
+  font-weight: normal;
+  font-style: normal;
+}
+
+.form-popup{
+  position:fixed;
+  width: 360px;
+  height: 180px;
+  display: none;
+  top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  justify-content: center;
+
+  text-align: center;
+}
+
+
+.block{
+  position: fixed;
+  background-color: #222222;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  background: rgba(0, 0, 0, .65);
+  display: none;
+}
+
+
+
+
+/*-------------------------  HISTORY ----------------------------------------------*/
+
+.bannerHistory{
+
+  text-align: center;
+  padding: 100px;
+  color: #F8F8F8;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  background-attachment:fixed;
+  background-image:url("../img/books.jpg");
+  background-position:bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  font-size: 120%;
+}
+
+.selectStat{
+  display: flex;
+  width: 100%;
+  height: 50px;
+  justify-content: space-around;
+  color: white;
+
+}
+
+.Hdiv{
+  width: 50%;
+  text-align: center;
+  background-color: #6E3B55;
+  padding: 10px;
+}
+
+.Cdiv{
+  width: 50%;
+  text-align: center;
+  background-color: #48699B;
+  padding: 10px;
+}
+
+.Hdiv:hover{
+  background-color: #91c4aa;
+  cursor:pointer;
+}
+
+.Cdiv:hover{
+  background-color: #b79664;
+  cursor:pointer;
+}
+
+
+
+.history{
+  display: none;
+}
+
+.country{
+  display: none;
+}
+
+
+
+
+
+.tableau{
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tableau td, .tableau thead
+{
+  padding: 8px;
+}
+
+.tableau thead{
+  background-color: #2F364E;
+  font-weight: bold;
+  color: white;
+}
+
+.tableau, .tableau thead, .tableau td{
+border: 1px solid black;
+}
+
+.tableau tbody tr:hover{
+  background-color: #aaa;
+  color: black;
+}
+
+.vide{
+  height: 300px;
+}
+
+
+/*-------------------------  CONTACT US ----------------------------------------------*/
+.bannerContactUS{
+
+  text-align: center;
+  padding: 100px;
+  color: #F8F8F8;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  background-attachment:fixed;
+  background-image:url("../img/lamp.jpg");
+  background-position:bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  font-size: 120%;
+}
+
+
+.containerContactUs{
+  align-items: center;
+  text-align: center;
+  padding: 70px;
+  background-color: white;
+}
+
+
+
+/*----------------------------------------------------------------------------*/
+
+
+@media screen and (max-width: 600px){
+    ul.topnav li.right,
+    ul.topnav li {
+      float: none;
+      display: none;
+    }
+}
+
+
+/*-------------------------  ADMIN PANEL ----------------------------------------------*/
+.adminData{
+	align-items: center;
+	text-align:center;
+	
+}
+
+.userTable{
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.graph{
+	display: block;
+	margin-top: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%;
+	text-align:center;
+	align-items: center;
+	font-weight: bold;
+	font-size: 32;
+}
+
+.graphForm{
+	float: right;
+	padding: 50px;
+}
+
+.graphSwitch{
+	margin-left: 50px;
+}
