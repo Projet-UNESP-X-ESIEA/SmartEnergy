@@ -1,6 +1,7 @@
 # SmartEnergy
 
-## Rapport :
+ # livrable :
+- PECHAKUCHA [ici](https://etesiea-my.sharepoint.com/:p:/g/personal/louazel_et_esiea_fr/EV-0znvtc8lJkB4nA7Fh-HgBPITFIv0ce342eHxhLfs0qw?e=UGiOiC)
 - Rapport intermédiaire S1 [ici](https://etesiea-my.sharepoint.com/:w:/g/personal/louazel_et_esiea_fr/EUN8jOGTI4hNhI6Fkin5of4B_zwlR1DtPv4TTg-eGPIJOA?e=tKN4dm)
 
 ## Ressources :
