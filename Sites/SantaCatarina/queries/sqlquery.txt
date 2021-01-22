@@ -1,0 +1,15 @@
+//INSERT IGNORE INTO dayfiltertags (date, tag)
+//(SELECT DATE(TIMESTAMP), (SELECT 'Rainy' FROM weatherstation WHERE 'Rain'> 0)) FROM weatherstation;
+
+INSERT IGNORE INTO dayfiltertags (date, tag)
+(SELECT DATE(TIMESTAMP), ) FROM weatherstation;
+
+UPDATE dayfiltertags SET tag="Rainy"
+WHERE date=(SELECT DISTINCT DATE(TIMESTAMP) FROM weatherstation WHERE (Rain > 0 AND DATE(TIMESTAMP) = date));
+
+
+SELECT TIME(TIMESTAMP)/240000, ASIN(GlobalRadiation/(SELECT MAX(GlobalRadiation) FROM weatherstation WHERE DATE(TIMESTAMP) = $value)) FROM weatherstation 
+WHERE DATE(TIMESTAMP) = $value AND TIME(TIMESTAMP) BETWEEN '06:00:00' AND '17:00:00';
+
+SELECT MAX(GlobalRadiation) FROM weatherstation WHERE YEAR(TIMESTAMP) = '2018' GROUP BY DATE(TIMESTAMP);
+SELECT MAX(GlobalRadiation) FROM weatherstation WHERE YEAR(TIMESTAMP) = '2018' AND DATE(TIMESTAMP) = (SELECT date FROM dayfiltertags WHERE date = DATE(TIMESTAMP) AND tag='Sunny') GROUP BY DATE(TIMESTAMP);
