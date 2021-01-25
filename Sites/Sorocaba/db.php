@@ -1,8 +1,8 @@
 <?php
   //call of the database
   $host       = "127.0.0.1:3306"; // Host name.
-  $db_user    = "root";           // mysql user
-  $db_password= "";               // mysql pass
+  $db_user    = "admin";           // mysql user
+  $db_password= "admin";               // mysql pass
   $db         = 'weather';        // Database name.
 
   // Check connection

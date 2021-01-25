@@ -16,7 +16,7 @@
 
         <li><a href="TheProject.php">THE PROJECT</a></li>
 
-        <li><a href="ContactUS.php">CONTACT US</a></li>
+        <li><a href="ContactUs.php">CONTACT US</a></li>
 
       </ul>
 

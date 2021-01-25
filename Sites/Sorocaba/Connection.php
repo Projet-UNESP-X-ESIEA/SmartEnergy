@@ -13,7 +13,7 @@
 
     <div class="Connection">
       <h1> Connection </h1>
-      <form method="POST" action="connection.php">
+      <form method="POST" action="Connection.php">
         <input type="text" class="input-box" name="pseudo" placeholder="Pseudo">
         <input type="password" class="input-box" name="mdp" placeholder="Password">
 

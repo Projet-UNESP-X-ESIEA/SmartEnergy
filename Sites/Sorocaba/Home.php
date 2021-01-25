@@ -75,7 +75,7 @@
         <p> EXPORT </p>
       </div>
       <div class="imgAndButton">
-        <a href="Import.php"> <img class="homeImg" src="img/cloudy.png"> </a>
+        <a href="Import.php"> <img class="homeImg" src="img/Cloudy.png"> </a>
         <p> IMPORT </p>
       </div>
       <div class="imgAndButton">
