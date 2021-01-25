@@ -33,9 +33,11 @@
 
       $mdpchiffre = hash("sha256", $pseudo."monsalage".$mdp);
 
-      $sql = "SELECT * FROM user WHERE username = '$pseudo' && password = '$mdpchiffre'";
+      $sql = "SELECT * FROM user WHERE username = :pseudo && password = :mdpchiffre";
+      $prep = $conn->prepare($sql);
+      $prep->execute(['pseudo' => $pseudo, 'mdpchiffre' => $mdpchiffre]);
+      $result = $prep->fetch();
 
-      $result = $conn->query($sql);
       if(!$result){
         echo "query impossible ($sql);" . mysqli_error();
         exit;
