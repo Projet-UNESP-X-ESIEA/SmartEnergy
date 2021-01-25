@@ -13,7 +13,7 @@
 
     <div class="Connection">
       <h1> Connection </h1>
-      <form method="POST" action="connection.php">
+      <form method="POST" action="Connection.php">
         <input type="text" class="input-box" name="pseudo" placeholder="Pseudo">
         <input type="password" class="input-box" name="mdp" placeholder="Password">
 
@@ -33,9 +33,11 @@
 
       $mdpchiffre = hash("sha256", $pseudo."monsalage".$mdp);
 
-      $sql = "SELECT * FROM user WHERE username = '$pseudo' && password = '$mdpchiffre'";
+      $sql = "SELECT * FROM user WHERE username = :pseudo && password = :mdpchiffre";
+      $prep = $conn->prepare($sql);
+      $prep->execute(['pseudo' => $pseudo, 'mdpchiffre' => $mdpchiffre]);
+      $result = $prep->fetch();
 
-      $result = $conn->query($sql);
       if(!$result){
         echo "query impossible ($sql);" . mysqli_error();
         exit;
