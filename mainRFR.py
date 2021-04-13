@@ -1,0 +1,133 @@
+from Network import Network
+from FCLayer import FCLayer
+from ActivationLayer import ActivationLayer
+from utilities import tanh, tanh_prime, mse, mse_prime
+from keras.datasets import mnist
+from keras.utils import np_utils
+import pandas
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.neural_network import MLPClassifier, MLPRegressor
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, f1_score
+from sklearn import metrics
+
+
+def analyseColumn(ptable, pnbX):
+    rep = [0 for _ in range(pnbX)]
+    print(rep)
+    rep[0] = ptable.max()
+    rep[1] = ptable.min()
+    print(rep)
+    return rep
+
+
+def minmax_norm(df_input):
+    return (df_input - df_input.min()) / (df_input.max() - df_input.min())
+
+
+def eval_model(y_true, y_pred, x_nor):
+    # matrice de confusion
+    mc = confusion_matrix(y_true, y_pred)
+    print("Confusion matrix :")
+    print(mc)
+    # taux d'erreur
+    err = 1 - accuracy_score(y_true, y_pred)
+    print("Err-rate = ", err)
+    # F1-score
+    f1 = f1_score(x_nor[3])
+    print("F1-Score = ", f1)
+
+
+def main():
+    heures_data = pandas.read_table("ALLvalue.csv", sep=",", header=0, decimal=".")
+    del heures_data["ENERGIA2"]
+    print(heures_data.columns)
+    print(heures_data.shape)
+    print(heures_data.head())
+    print(heures_data.describe().transpose())
+
+    X = heures_data.drop(["MONTH", "DAY", "YEAR", "HOUR"], axis=1)
+    X = heures_data[X["ENERGIA1"] > 0]
+
+    X_normal = minmax_norm(X)
+    Y_normal = [i for i in range(X_normal.shape[0])]
+
+    print(X_normal.describe().transpose())
+    ZTrain, ZTest, y_train, y_test = train_test_split(X_normal, Y_normal, test_size=0.2)
+
+    print(len(ZTrain))
+
+    regressor = RandomForestRegressor(n_estimators=20, random_state=0)
+    regressor.fit(ZTrain.drop(["ENERGIA1"], axis=1), ZTrain["ENERGIA1"])
+    y_pred = regressor.predict(ZTest.drop(["ENERGIA1"], axis=1))
+    y_test = ZTest["ENERGIA1"]
+
+    print("###### RESULT #######")
+    print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
+    print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred))
+    print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
+
+
+    ZTETT = ZTest
+    # print(predm_sklearn)
+    # print(pmc_sklearn.score(ZTest, ZTETT[3]))
+    # eval_model(ZTETT[3], predm_sklearn, X_test.T)
+
+    plt.figure()
+    plt.rcParams["figure.figsize"] = (1, 100)
+    plt.gca().xaxis.set_ticks(range(0, 10000, 10), minor=True)
+    plt.plot([e for e in range(len(y_pred))], y_pred, "x", label="prevision")
+    plt.plot([e for e in range(len(ZTETT["ENERGIA1"]))], ZTETT["ENERGIA1"], "x", label="original")
+    plt.legend()
+
+    plt.savefig('test.png', dpi=300)
+
+    pred = pandas.Series(y_pred, name="prediction", index=y_test)
+    pred.to_csv("JSP.csv")
+    """
+    norm = ZTETT.rename(
+        columns={'DAY': 'd_n', 'HOUR': 'h_n', 'ENERGIA1': 'e_n', 'TEMPERATURA': 't_n', 'UMIDADE': 'u_n', 'CHUVA': 'c_n',
+                 'IRRADIACAO': 'i_n'})
+    newTab = pandas.concat([norm, pred], axis=1)
+    newTab.to_csv("testPred2.csv")
+    allTab = pandas.concat([newTab, X], axis=1, join="inner")
+    allTab.to_csv("testPredAll.csv")
+    """
+
+    """"
+    X_train, X_test, y_train, y_test = train_test_split(X_normal, Y_normal)
+    y_train = y_train.astype('float64')
+    y_test = y_test.astype('float64')
+    scaler = StandardScaler()
+    scaler.fit(X_train)
+
+    X_train = scaler.transform(X_train)
+    X_test = scaler.transform(X_test)
+
+
+
+    mlp = MLPClassifier(hidden_layer_sizes=(13, 13, 13), max_iter=1000)
+    sortie = mlp.fit(X_train, y_train)
+    print(sortie)
+    predictions = mlp.predict(X_test)
+    print(confusion_matrix(y_test,predictions))
+    print(classification_report(y_test, predictions))
+
+    """
+    ###
+    # model = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1)
+    # model.fit(train[columns], train[target])
+
+    # predictions = model.predict(test[columns])
+    # square_error = mean_squared_error(predictions, test[target])
+    # print(square_error)
+
+
+if __name__ == '__main__':
+    main()
