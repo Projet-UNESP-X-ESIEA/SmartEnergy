@@ -75,12 +75,21 @@ def main():
     #choix des variables à partir de ZTrain
     YTrain = ZTrain.drop(["ENERGIA1","HOUR"], axis=1)
     YVar = ZTrain["ENERGIA1"]
+    YTest = ZTest.drop(["ENERGIA1", "HOUR"], axis=1)[:8]
+    YTRVar = ZTest["ENERGIA1"]
+
+
+    #
+    # INIT REGRESSOR
+    #
+
+    #ANN
+    reg0 = MLPRegressor(hidden_layer_sizes=(13, 13, 13), random_state=1, max_iter=1500, solver="lbfgs")
+    reg0.fit(YTrain, YVar)
 
     #RANDOM FOREST
     reg1 = RandomForestRegressor(n_estimators=200, random_state=0)
     reg1.fit(YTrain, YVar)
-   # y_pred = regressor.predict(ZTest.drop(["ENERGIA1"], axis=1))
-    y_test = ZTest["ENERGIA1"]
 
     #GRADIENT BOOSTING REGRESSOR
     reg2 = GradientBoostingRegressor(random_state=200)
@@ -92,27 +101,30 @@ def main():
 
     #VotingRegressor
     ereg = VotingRegressor([('rf', reg1), ('gb', reg2), ('lr', reg3)])
-    ereg.fit(ZTrain.drop(["ENERGIA1","HOUR"], axis=1), ZTrain["ENERGIA1"])
+    ereg.fit(YTrain, YVar)
 
-    zt = ZTest.drop(["ENERGIA1","HOUR"], axis=1)[:8]
-
-    pred1 = reg1.predict(zt)
-    pred2 = reg2.predict(zt)
-    pred3 = reg3.predict(zt)
-    pred4 = ereg.predict(zt)
+    #
+    #    TIME FOR PREDICTION
+    #
+    pred0 = reg0.predict(YTest)
+    pred1 = reg1.predict(YTest)
+    pred2 = reg2.predict(YTest)
+    pred3 = reg3.predict(YTest)
+    pred4 = ereg.predict(YTest)
     zr = []
     zh = []
     print(pred2)
     for i in range(8):
-        zr.append(y_test.iloc[i])
+        zr.append(YTRVar.iloc[i])
         zh.append(ZTest["HOUR"].iloc[i])
 
 
     ###### RESULT ######
-    result(pred1, y_test, "RandomForestRegressor")
-    result(pred2, y_test, "GradientBoostingRegressor")
-    result(pred3, y_test, "LinearRegressor")
-    result(pred4, y_test, "VotingRegressor with RFR, GBR, LR")
+    result(pred0, YTRVar, "MultiLayerPerceptronRegressor")
+    result(pred1, YTRVar, "RandomForestRegressor")
+    result(pred2, YTRVar, "GradientBoostingRegressor")
+    result(pred3, YTRVar, "LinearRegressor")
+    result(pred4, YTRVar, "VotingRegressor with RFR, GBR, LR")
 
     ###### START PLOT #####
     plt.figure()
@@ -148,7 +160,7 @@ def main():
 
     plt.savefig('test.png', dpi=300)
 
-    pred = pandas.Series(pred1, name="prediction", index=y_test)
+    pred = pandas.Series(pred1, name="prediction", index=YTRVar)
     pred.to_csv("JSP.csv")
     """
     norm = ZTETT.rename(
