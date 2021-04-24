@@ -66,27 +66,31 @@ def main():
 
     print(len(ZTrain))
 
+    #choix des variables à partir de ZTrain
+    YTrain = ZTrain.drop(["ENERGIA1","HOUR"], axis=1)
+    YVar = ZTrain["ENERGIA1"]
+
     #RANDOM FOREST
-    regressor = RandomForestRegressor(n_estimators=200, random_state=0)
-    regressor.fit(ZTrain.drop(["ENERGIA1","HOUR"], axis=1), ZTrain["ENERGIA1"])
+    reg1 = RandomForestRegressor(n_estimators=200, random_state=0)
+    reg1.fit(YTrain, YVar)
    # y_pred = regressor.predict(ZTest.drop(["ENERGIA1"], axis=1))
     y_test = ZTest["ENERGIA1"]
 
     #GRADIENT BOOSTING REGRESSOR
     reg2 = GradientBoostingRegressor(random_state=200)
-    reg2.fit(ZTrain.drop(["ENERGIA1","HOUR"], axis=1), ZTrain["ENERGIA1"])
+    reg2.fit(YTrain, YVar)
 
     #LINEAR REGRESSOR
     reg3 = LinearRegression()
-    reg3.fit(ZTrain.drop(["ENERGIA1","HOUR"], axis=1), ZTrain["ENERGIA1"])
+    reg3.fit(YTrain, YVar)
 
     #VotingRegressor
-    ereg = VotingRegressor([('rf', regressor), ('gb', reg2), ('lr', reg3)])
+    ereg = VotingRegressor([('rf', reg1), ('gb', reg2), ('lr', reg3)])
     ereg.fit(ZTrain.drop(["ENERGIA1","HOUR"], axis=1), ZTrain["ENERGIA1"])
 
     zt = ZTest.drop(["ENERGIA1","HOUR"], axis=1)[:8]
 
-    y_pred = regressor.predict(zt)
+    pred1 = reg1.predict(zt)
     pred2 = reg2.predict(zt)
     pred3 = reg3.predict(zt)
     pred4 = ereg.predict(zt)
@@ -99,15 +103,15 @@ def main():
 
 
 
-###### START PLOT #####
+    ###### START PLOT #####
     plt.figure()
+    plt.plot(zh, pred1, 'b^', label='RandomForestRegressor')
     plt.plot(zh, pred2, 'gd', label='GradientBoostingRegressor')
-    plt.plot(zh, y_pred, 'b^', label='RandomForestRegressor')
     plt.plot(zh, pred3, 'ys', label='LinearRegression')
     plt.plot(zh, pred4, 'r*', ms=10, label='VotingRegressor')
     plt.plot(zh, zr, 'rx', label='RealValue')
 
-    #plt.tick_params(axis='x', which='both', bottom=False, top=False,
+    # plt.tick_params(axis='x', which='both', bottom=False, top=False,
     #                labelbottom=False)
     plt.ylabel('predicted')
     plt.xlabel('normalized hour')
@@ -115,12 +119,7 @@ def main():
     plt.title('Regressor predictions and their average')
 
     plt.show()
-##### END PLOT #####
-
-    print("###### RESULT #######")
-    print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
-    print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred))
-    print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
+    ##### END PLOT #####
 
 
     ZTETT = ZTest
@@ -132,13 +131,13 @@ def main():
     plt.figure()
     plt.rcParams["figure.figsize"] = (1, 100)
     plt.gca().xaxis.set_ticks(range(0, 10000, 10), minor=True)
-    plt.plot([e for e in range(len(y_pred))], y_pred, "x", label="prevision")
+    plt.plot([e for e in range(len(pred1))], pred1, "x", label="prevision")
     plt.plot([e for e in range(len(ZTETT["ENERGIA1"]))], ZTETT["ENERGIA1"], "x", label="original")
     plt.legend()
 
     plt.savefig('test.png', dpi=300)
 
-    pred = pandas.Series(y_pred, name="prediction", index=y_test)
+    pred = pandas.Series(pred1, name="prediction", index=y_test)
     pred.to_csv("JSP.csv")
     """
     norm = ZTETT.rename(
