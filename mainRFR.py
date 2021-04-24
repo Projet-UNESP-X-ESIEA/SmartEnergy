@@ -1,7 +1,3 @@
-from Network import Network
-from FCLayer import FCLayer
-from ActivationLayer import ActivationLayer
-from utilities import tanh, tanh_prime, mse, mse_prime
 from keras.datasets import mnist
 from keras.utils import np_utils
 import pandas
@@ -16,6 +12,8 @@ from sklearn.neural_network import MLPClassifier, MLPRegressor
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, f1_score
 from sklearn import metrics
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.ensemble import VotingRegressor
 
 
 def analyseColumn(ptable, pnbX):
@@ -45,28 +43,79 @@ def eval_model(y_true, y_pred, x_nor):
 
 
 def main():
-    heures_data = pandas.read_table("ALLvalue.csv", sep=",", header=0, decimal=".")
+    heures_data = pandas.read_table("../poland/neural network/ALLvalue.csv", sep=",", header=0, decimal=".")
     del heures_data["ENERGIA2"]
     print(heures_data.columns)
     print(heures_data.shape)
     print(heures_data.head())
     print(heures_data.describe().transpose())
 
-    X = heures_data.drop(["MONTH", "DAY", "YEAR", "HOUR"], axis=1)
+    X = heures_data.drop(["MONTH", "DAY", "YEAR"], axis=1)
     X = heures_data[X["ENERGIA1"] > 0]
+    X = X[X["ENERGIA1"] < 400]
 
     X_normal = minmax_norm(X)
     Y_normal = [i for i in range(X_normal.shape[0])]
+
+    #denormalisation de ENERGIA1
+    X_normal = X_normal.drop(columns="ENERGIA1")
+    X_normal["ENERGIA1"] = X["ENERGIA1"]
 
     print(X_normal.describe().transpose())
     ZTrain, ZTest, y_train, y_test = train_test_split(X_normal, Y_normal, test_size=0.2)
 
     print(len(ZTrain))
 
-    regressor = RandomForestRegressor(n_estimators=20, random_state=0)
-    regressor.fit(ZTrain.drop(["ENERGIA1"], axis=1), ZTrain["ENERGIA1"])
-    y_pred = regressor.predict(ZTest.drop(["ENERGIA1"], axis=1))
+    #RANDOM FOREST
+    regressor = RandomForestRegressor(n_estimators=200, random_state=0)
+    regressor.fit(ZTrain.drop(["ENERGIA1","HOUR"], axis=1), ZTrain["ENERGIA1"])
+   # y_pred = regressor.predict(ZTest.drop(["ENERGIA1"], axis=1))
     y_test = ZTest["ENERGIA1"]
+
+    #GRADIENT BOOSTING REGRESSOR
+    reg2 = GradientBoostingRegressor(random_state=200)
+    reg2.fit(ZTrain.drop(["ENERGIA1","HOUR"], axis=1), ZTrain["ENERGIA1"])
+
+    #LINEAR REGRESSOR
+    reg3 = LinearRegression()
+    reg3.fit(ZTrain.drop(["ENERGIA1","HOUR"], axis=1), ZTrain["ENERGIA1"])
+
+    #VotingRegressor
+    ereg = VotingRegressor([('rf', regressor), ('gb', reg2), ('lr', reg3)])
+    ereg.fit(ZTrain.drop(["ENERGIA1","HOUR"], axis=1), ZTrain["ENERGIA1"])
+
+    zt = ZTest.drop(["ENERGIA1","HOUR"], axis=1)[:8]
+
+    y_pred = regressor.predict(zt)
+    pred2 = reg2.predict(zt)
+    pred3 = reg3.predict(zt)
+    pred4 = ereg.predict(zt)
+    zr = []
+    zh = []
+    print(pred2)
+    for i in range(8):
+        zr.append(y_test.iloc[i])
+        zh.append(ZTest["HOUR"].iloc[i])
+
+
+
+###### START PLOT #####
+    plt.figure()
+    plt.plot(zh, pred2, 'gd', label='GradientBoostingRegressor')
+    plt.plot(zh, y_pred, 'b^', label='RandomForestRegressor')
+    plt.plot(zh, pred3, 'ys', label='LinearRegression')
+    plt.plot(zh, pred4, 'r*', ms=10, label='VotingRegressor')
+    plt.plot(zh, zr, 'rx', label='RealValue')
+
+    #plt.tick_params(axis='x', which='both', bottom=False, top=False,
+    #                labelbottom=False)
+    plt.ylabel('predicted')
+    plt.xlabel('normalized hour')
+    plt.legend(loc="best")
+    plt.title('Regressor predictions and their average')
+
+    plt.show()
+##### END PLOT #####
 
     print("###### RESULT #######")
     print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
@@ -78,6 +127,7 @@ def main():
     # print(predm_sklearn)
     # print(pmc_sklearn.score(ZTest, ZTETT[3]))
     # eval_model(ZTETT[3], predm_sklearn, X_test.T)
+    #print(regressor.score(ZTest.drop(["ENERGIA1"], axis=1), ZTest["ENERGIA1"]))
 
     plt.figure()
     plt.rcParams["figure.figsize"] = (1, 100)
