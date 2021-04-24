@@ -113,7 +113,7 @@ def main():
     # choix des variables à partir de ZTrain
     YTrain = ZTrain.drop(["ENERGIA1", "HOUR"], axis=1)
     YVar = ZTrain["ENERGIA1"]
-    YTest = ZTest.drop(["ENERGIA1", "HOUR"], axis=1)[:8]
+    YTest = ZTest.drop(["ENERGIA1", "HOUR"], axis=1)
     YTRVar = ZTest["ENERGIA1"]
 
     #
@@ -155,13 +155,22 @@ def main():
         zr.append(YTRVar.iloc[i])
         zh.append(ZTest["HOUR"].iloc[i])
 
+    #correction val negative LinearRegression
+    for i in range(len(pred3)):
+        if pred3[i] < 0:
+            pred3[i] = 0
 
     ###### RESULT ######
-    res0 = result(pred0, zr, "MultiLayerPerceptronRegressor")
-    res2 = result(pred1, zr, "RandomForestRegressor")
-    res3 = result(pred2, zr, "GradientBoostingRegressor")
-    res4 = result(pred3, zr, "LinearRegressor")
-    res5 = result(pred4, zr, "VotingRegressor with RFR, GBR, LR")
+    print('shape YTest : {} \n shape zr {}'.format(len(YTest), len(zr)))
+    res = {
+        "MultiLayerPerceptronRegressor": result(pred0, zr),
+        "RandomForestRegressor": result(pred1, zr),
+        "GradientBoostingRegressor": result(pred2, zr),
+        "LinearRegressor": result(pred3, zr),
+        "VotingRegressor with RFR, GBR, LR": result(pred4, zr)
+    }
+    er = explainResult(res, desc=["Explained varince score", "r2 score"])
+    displayResult(er)
 
     ###### START PLOT #####
     plt.figure()
