@@ -41,18 +41,20 @@ def eval_model(y_true, y_pred, x_nor):
     f1 = f1_score(x_nor[3])
     print("F1-Score = ", f1)
 
+
 def result(pred, Rvalue):
-    return {"Explained varince score" : metrics.explained_variance_score(Rvalue, pred),
-           "Max error" : metrics.max_error(Rvalue, pred),
-           "Mean Absolute Error" : metrics.mean_absolute_error(Rvalue, pred),
-           "Mean Squared Error" : metrics.mean_squared_error(Rvalue, pred),
-           "mean squared log error" : metrics.mean_squared_log_error(Rvalue, pred),
-           "median absolute error" : metrics.median_absolute_error(Rvalue, pred),
-           "r2 score" : metrics.r2_score(Rvalue, pred),
-           "mean poisson devianc" : metrics.mean_poisson_deviance(Rvalue, pred),
-           "mean gamma deviance" : metrics.mean_gamma_deviance(Rvalue, pred),
-           "mean absolute percentage error" : metrics.mean_absolute_percentage_error(Rvalue, pred),
-           "Root Mean Squared Error" : np.sqrt(metrics.mean_squared_error(Rvalue, pred))}
+    return {"Explained varince score": metrics.explained_variance_score(Rvalue, pred),
+            "Max error": metrics.max_error(Rvalue, pred),
+            "Mean Absolute Error": metrics.mean_absolute_error(Rvalue, pred),
+            "Mean Squared Error": metrics.mean_squared_error(Rvalue, pred),
+            "mean squared log error": metrics.mean_squared_log_error(Rvalue, pred),
+            "median absolute error": metrics.median_absolute_error(Rvalue, pred),
+            "r2 score": metrics.r2_score(Rvalue, pred),
+            "mean poisson devianc": metrics.mean_poisson_deviance(Rvalue, pred),
+            "mean gamma deviance": metrics.mean_gamma_deviance(Rvalue, pred),
+            "mean absolute percentage error": metrics.mean_absolute_percentage_error(Rvalue, pred),
+            "Root Mean Squared Error": np.sqrt(metrics.mean_squared_error(Rvalue, pred))}
+
 
 def displayResult(dic, label=""):
     print("\n############### RESULT {} ###############".format(label))
@@ -76,7 +78,7 @@ def main():
     X_normal = minmax_norm(X)
     Y_normal = [i for i in range(X_normal.shape[0])]
 
-    #denormalisation de ENERGIA1
+    # denormalisation de ENERGIA1
     X_normal = X_normal.drop(columns="ENERGIA1")
     X_normal["ENERGIA1"] = X["ENERGIA1"]
 
@@ -85,34 +87,33 @@ def main():
 
     print(len(ZTrain))
 
-    #choix des variables à partir de ZTrain
-    YTrain = ZTrain.drop(["ENERGIA1","HOUR"], axis=1)
+    # choix des variables à partir de ZTrain
+    YTrain = ZTrain.drop(["ENERGIA1", "HOUR"], axis=1)
     YVar = ZTrain["ENERGIA1"]
     YTest = ZTest.drop(["ENERGIA1", "HOUR"], axis=1)[:8]
     YTRVar = ZTest["ENERGIA1"]
-
 
     #
     # INIT REGRESSOR
     #
 
-    #ANN
+    # ANN
     reg0 = MLPRegressor(hidden_layer_sizes=(13, 13, 13), random_state=1, max_iter=1500)
     reg0.fit(YTrain, YVar)
 
-    #RANDOM FOREST
+    # RANDOM FOREST
     reg1 = RandomForestRegressor(n_estimators=200, random_state=0)
     reg1.fit(YTrain, YVar)
 
-    #GRADIENT BOOSTING REGRESSOR
+    # GRADIENT BOOSTING REGRESSOR
     reg2 = GradientBoostingRegressor(random_state=200)
     reg2.fit(YTrain, YVar)
 
-    #LINEAR REGRESSOR
+    # LINEAR REGRESSOR
     reg3 = LinearRegression()
     reg3.fit(YTrain, YVar)
 
-    #VotingRegressor
+    # VotingRegressor
     ereg = VotingRegressor([('rf', reg1), ('gb', reg2), ('lr', reg3)])
     ereg.fit(YTrain, YVar)
 
