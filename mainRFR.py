@@ -41,23 +41,24 @@ def eval_model(y_true, y_pred, x_nor):
     f1 = f1_score(x_nor[3])
     print("F1-Score = ", f1)
 
-def result(pred, Rvalue, label=""):
-    print("###### RESULT {} #######".format(label))
-    print('Explained varince score : ', metrics.explained_variance_score(Rvalue, pred))
-    print('Max error : ', metrics.max_error(Rvalue, pred))
-    print('Mean Absolute Error: ', metrics.mean_absolute_error(Rvalue, pred))
-    print('Mean Squared Error: ', metrics.mean_squared_error(Rvalue, pred))
-    print('mean squared log error : ', metrics.mean_squared_log_error(Rvalue, pred))
-    print('median absolute error : ', metrics.median_absolute_error(Rvalue, pred))
-    print('r2 score : ', metrics.r2_score(Rvalue, pred))
-    print('mean poisson deviance : ', metrics.mean_poisson_deviance(Rvalue, pred))
-    print('mean gamma deviance : ', metrics.mean_gamma_deviance(Rvalue, pred))
-    print('mean absolute percentage error : ', metrics.mean_absolute_percentage_error(Rvalue,pred))
-    print('Root Mean Squared Error: ', np.sqrt(metrics.mean_squared_error(Rvalue, pred)))
+def result(pred, Rvalue):
+    return {"Explained varince score" : metrics.explained_variance_score(Rvalue, pred),
+           "Max error" : metrics.max_error(Rvalue, pred),
+           "Mean Absolute Error" : metrics.mean_absolute_error(Rvalue, pred),
+           "Mean Squared Error" : metrics.mean_squared_error(Rvalue, pred),
+           "mean squared log error" : metrics.mean_squared_log_error(Rvalue, pred),
+           "median absolute error" : metrics.median_absolute_error(Rvalue, pred),
+           "r2 score" : metrics.r2_score(Rvalue, pred),
+           "mean poisson devianc" : metrics.mean_poisson_deviance(Rvalue, pred),
+           "mean gamma deviance" : metrics.mean_gamma_deviance(Rvalue, pred),
+           "mean absolute percentage error" : metrics.mean_absolute_percentage_error(Rvalue, pred),
+           "Root Mean Squared Error" : np.sqrt(metrics.mean_squared_error(Rvalue, pred))}
+
+
 
 
 def main():
-    heures_data = pandas.read_table("../poland/neural network/ALLvalue.csv", sep=",", header=0, decimal=".")
+    heures_data = pandas.read_table("./ALLvalue.csv", sep=",", header=0, decimal=".")
     del heures_data["ENERGIA2"]
     print(heures_data.columns)
     print(heures_data.shape)
@@ -92,7 +93,7 @@ def main():
     #
 
     #ANN
-    reg0 = MLPRegressor(hidden_layer_sizes=(13, 13, 13), random_state=1, max_iter=1500, solver="lbfgs")
+    reg0 = MLPRegressor(hidden_layer_sizes=(13, 13, 13), random_state=1, max_iter=1500)
     reg0.fit(YTrain, YVar)
 
     #RANDOM FOREST
@@ -128,11 +129,11 @@ def main():
 
 
     ###### RESULT ######
-    result(pred0, YTRVar, "MultiLayerPerceptronRegressor")
-    result(pred1, YTRVar, "RandomForestRegressor")
-    result(pred2, YTRVar, "GradientBoostingRegressor")
-    result(pred3, YTRVar, "LinearRegressor")
-    result(pred4, YTRVar, "VotingRegressor with RFR, GBR, LR")
+    res0 = result(pred0, zr, "MultiLayerPerceptronRegressor")
+    res2 = result(pred1, zr, "RandomForestRegressor")
+    res3 = result(pred2, zr, "GradientBoostingRegressor")
+    res4 = result(pred3, zr, "LinearRegressor")
+    res5 = result(pred4, zr, "VotingRegressor with RFR, GBR, LR")
 
     ###### START PLOT #####
     plt.figure()
@@ -152,7 +153,7 @@ def main():
     plt.show()
     ##### END PLOT #####
 
-
+    """
     ZTETT = ZTest
     # print(predm_sklearn)
     # print(pmc_sklearn.score(ZTest, ZTETT[3]))
@@ -170,7 +171,7 @@ def main():
 
     pred = pandas.Series(pred1, name="prediction", index=YTRVar)
     pred.to_csv("JSP.csv")
-    """
+    
     norm = ZTETT.rename(
         columns={'DAY': 'd_n', 'HOUR': 'h_n', 'ENERGIA1': 'e_n', 'TEMPERATURA': 't_n', 'UMIDADE': 'u_n', 'CHUVA': 'c_n',
                  'IRRADIACAO': 'i_n'})
