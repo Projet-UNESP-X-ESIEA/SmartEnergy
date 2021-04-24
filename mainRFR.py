@@ -62,6 +62,29 @@ def displayResult(dic, label=""):
         print(" - {} : {}".format(key, value))
 
 
+def explainResult(dic, exclude=[], desc=[]):
+    res = {"Explained varince score": [],
+           "Max error": [],
+           "Mean Absolute Error": [],
+           "Mean Squared Error": [],
+           "mean squared log error": [],
+           "median absolute error": [],
+           "r2 score": [],
+           "mean poisson devianc": [],
+           "mean gamma deviance": [],
+           "mean absolute percentage error": [],
+           "Root Mean Squared Error": []}
+    for key, value in dic.items():
+        if key not in exclude:
+            for k, v in res.items():
+                res[k].append((key, value[k]))
+    for k, v in res.items():
+        if k in desc:
+            res[k] = sorted(v, key=lambda val: val[1], reverse=True)
+        else:
+            res[k] = sorted(v, key=lambda val: val[1])
+    return res
+
 
 def main():
     heures_data = pandas.read_table("./ALLvalue.csv", sep=",", header=0, decimal=".")
@@ -128,7 +151,7 @@ def main():
     zr = []
     zh = []
     print(pred2)
-    for i in range(8):
+    for i in range(1006):
         zr.append(YTRVar.iloc[i])
         zh.append(ZTest["HOUR"].iloc[i])
 
