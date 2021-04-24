@@ -43,9 +43,17 @@ def eval_model(y_true, y_pred, x_nor):
 
 def result(pred, Rvalue, label=""):
     print("###### RESULT {} #######".format(label))
-    print('Mean Absolute Error:', metrics.mean_absolute_error(Rvalue, pred))
-    print('Mean Squared Error:', metrics.mean_squared_error(Rvalue, pred))
-    print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(Rvalue, pred)))
+    print('Explained varince score : ', metrics.explained_variance_score(Rvalue, pred))
+    print('Max error : ', metrics.max_error(Rvalue, pred))
+    print('Mean Absolute Error: ', metrics.mean_absolute_error(Rvalue, pred))
+    print('Mean Squared Error: ', metrics.mean_squared_error(Rvalue, pred))
+    print('mean squared log error : ', metrics.mean_squared_log_error(Rvalue, pred))
+    print('median absolute error : ', metrics.median_absolute_error(Rvalue, pred))
+    print('r2 score : ', metrics.r2_score(Rvalue, pred))
+    print('mean poisson deviance : ', metrics.mean_poisson_deviance(Rvalue, pred))
+    print('mean gamma deviance : ', metrics.mean_gamma_deviance(Rvalue, pred))
+    print('mean absolute percentage error : ', metrics.mean_absolute_percentage_error(Rvalue,pred))
+    print('Root Mean Squared Error: ', np.sqrt(metrics.mean_squared_error(Rvalue, pred)))
 
 
 def main():
