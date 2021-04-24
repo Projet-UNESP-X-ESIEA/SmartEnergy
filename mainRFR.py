@@ -54,6 +54,10 @@ def result(pred, Rvalue):
            "mean absolute percentage error" : metrics.mean_absolute_percentage_error(Rvalue, pred),
            "Root Mean Squared Error" : np.sqrt(metrics.mean_squared_error(Rvalue, pred))}
 
+def displayResult(dic, label=""):
+    print("\n############### RESULT {} ###############".format(label))
+    for key, value in dic.items():
+        print(" - {} : {}".format(key, value))
 
 
 
