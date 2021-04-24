@@ -41,6 +41,12 @@ def eval_model(y_true, y_pred, x_nor):
     f1 = f1_score(x_nor[3])
     print("F1-Score = ", f1)
 
+def result(pred, Rvalue, label=""):
+    print("###### RESULT {} #######".format(label))
+    print('Mean Absolute Error:', metrics.mean_absolute_error(Rvalue, pred))
+    print('Mean Squared Error:', metrics.mean_squared_error(Rvalue, pred))
+    print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(Rvalue, pred)))
+
 
 def main():
     heures_data = pandas.read_table("../poland/neural network/ALLvalue.csv", sep=",", header=0, decimal=".")
@@ -102,6 +108,11 @@ def main():
         zh.append(ZTest["HOUR"].iloc[i])
 
 
+    ###### RESULT ######
+    result(pred1, y_test, "RandomForestRegressor")
+    result(pred2, y_test, "GradientBoostingRegressor")
+    result(pred3, y_test, "LinearRegressor")
+    result(pred4, y_test, "VotingRegressor with RFR, GBR, LR")
 
     ###### START PLOT #####
     plt.figure()
