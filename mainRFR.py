@@ -97,7 +97,6 @@ def toDicByFactor(pred, facteur):
             else:
                 res[facteur[i]].append(pred[i])
         res2 = dict(sorted(res.items(), key=lambda t: t[0]))
-        print(res2)
     return res2
 
 
@@ -174,13 +173,11 @@ def main():
     pred4 = correctPred(ereg.predict(YTest))
     zr = []
     zh = []
-    print(pred2)
     for i in range(1006):
         zr.append(YTRVar.iloc[i])
         zh.append(ZTest["HOUR"].iloc[i])
 
     ###### RESULT ######
-    print('shape YTest : {} \n shape zr {}'.format(len(YTest), len(zr)))
     res = {
         "MultiLayerPerceptronRegressor": result(pred0, zr),
         "RandomForestRegressor": result(pred1, zr),
@@ -225,20 +222,34 @@ def main():
     plt.title('RandomForestRegressor predictions and their average')
     plt.show()
     """
-    figure = plt.figure(figsize=(10, 10))
-    plt.gcf().subplots_adjust(left=0.1, bottom=0.1, right=0.9, top=0.9, wspace=0, hspace=0.1)
-    axes = figure.add_subplot(1, 2, 1)
-    axes.set_xlabel('normalized hour')
-    axes.set_ylabel('predicted')
-    axes.set_title('RandomForestRegressor predictions and their average')
-    axes.boxplot([predM[x] for x in predM.keys()], labels=predM.keys())
+    plt.figure(2, figsize=(25, 12))
+    #plt.gcf().subplots_adjust(left=0.2, bottom=0.2, right=1.5,
+    #                          top=0.9, wspace=0, hspace=0.5)
+    # division de la fenêtre graphique en 3 lignes, 1 colonne,
+    # graphique en position 1
+    # puis caractéristiques de ce graphique
 
-    axes = figure.add_subplot(1, 2, 2)
-    axes.set_xlabel('normalized hour')
-    axes.set_ylabel('predicted')
-    axes.set_title('RealValue predictions and their average')
-    axes.boxplot([RV[x] for x in RV.keys()], labels=predM.keys())
-    plt.show(axes)
+    plt.subplot(2, 1, 1)
+    plt.boxplot([predM[x] for x in predM.keys()], labels=predM.keys())
+    plt.title('RandomForestRegressor predictions and their average')
+    plt.grid()
+    plt.xlabel('normalized hour')
+    plt.ylabel('predicted')
+    plt.ylim(0)
+
+    # division de la fenêtre graphique en 3 lignes, 1 colonne,
+    # graphique en position 2
+    # puis caractéristiques de ce graphique
+
+    plt.subplot(2, 1, 2)
+    plt.boxplot([RV[x] for x in RV.keys()], labels=predM.keys())
+    plt.title('RealValue predictions and their average')
+    plt.grid()
+    plt.xlabel('normalized hour')
+    plt.ylabel('predicted')
+
+    plt.show()
+
     ######  END TEST BAM PLOT  #########
 
     """
