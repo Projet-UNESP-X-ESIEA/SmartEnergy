@@ -92,12 +92,12 @@ def toDicByFactor(pred, facteur):
     :return: dictionnaire classifier contenant tout les elements differents du tableau facteur
     """
     if len(pred) != len(facteur):
-        raise Exception("les tableau ne sont pas de même logueur")
+        raise Exception("les tableaux ne sont pas de même logueur")
     else:
         res = {}
         for i in range(len(pred)):
             if facteur[i] not in res.keys():
-                res[facteur[i]] = [pred[i],]
+                res[facteur[i]] = [pred[i], ]
             else:
                 res[facteur[i]].append(pred[i])
         res2 = dict(sorted(res.items(), key=lambda t: t[0]))
@@ -118,34 +118,53 @@ def correctPred(pred):
             res.append(pred[i])
     return res
 
-#TODO: fonction d'export des results
+
+# TODO: fonction d'export des results
 def toExport(data):
+    return None
 
 
+def inputValue(pathFile, varToSet=[], exclude=[], unNormalized=[], verbose=False, min=[], max=[]):
+    """
+    fonction permettant de créer un dataset panda et de le retourné normalisé en suivant un certain nombre de parametre.
 
-def main():
-    heures_data = pandas.read_table("./ALLvalue.csv", sep=",", header=0, decimal=".")
+    :param pathfile: chemin vers le csv contenant toute les données
+    :param varToSet: les colonnes auquel apporté des modification
+    :param exclude: les colonnes a supprimer
+    :param verbose: bollean permettant l'affichage de donnée sur le tableau de base
+    :param min: selection numérique minimal associer à varToSet avec l'index comme moyen de liaison
+    :param max: selection numérique maximal associer à varToSet avec l'index comme moyen de liaison
+    :return: renvoie le dataset comme paramettré et un tableau Yn (index des val du premier tableau)
+    """
+    if len(varToSet) != len(min) or len(varToSet) != len(max):
+        raise Exception("les tableaux ne sont pas de même logueur")
+    heures_data = pandas.read_table(pathFile, sep=",", header=0, decimal=".")
     del heures_data["ENERGIA2"]
-    print(heures_data.columns)
-    print(heures_data.shape)
-    print(heures_data.head())
-    print(heures_data.describe().transpose())
+    if verbose:
+        print(heures_data.columns)
+        print(heures_data.shape)
+        print(heures_data.head())
+        print(heures_data.describe().transpose())
+    X = heures_data.drop(exclude, axis=1)
+    for i in range(len(varToSet)):
+        X = X[X[varToSet[i]] > min[i]]
+        X = X[X[varToSet[i]] < max[i]]
+    if len(X.columns) == len(unNormalized):
+        Xn = X
+        Yn = [i for i in range(Xn.shape[0])]
+    else:
+        Xn = minmax_norm(X)
+        Yn = [i for i in range(Xn.shape[0])]
+        for element in unNormalized:
+            Xn = Xn.drop(columns=element)
+            Xn[element] = X[element]
+    return Xn, Yn
 
-    X = heures_data.drop(["MONTH", "DAY", "YEAR"], axis=1)
-    X = X[X["ENERGIA1"] > 0]
-    X = X[X["ENERGIA1"] < 100]
 
-    X_normal = minmax_norm(X)
-    Y_normal = [i for i in range(X_normal.shape[0])]
+def AlgoComparator(X_normal, Y_normal, test_s=0.2):
 
-    # denormalisation de ENERGIA1
-    X_normal = X_normal.drop(columns="ENERGIA1")
-    X_normal["ENERGIA1"] = X["ENERGIA1"]
+    ZTrain, ZTest, y_train, y_test = train_test_split(X_normal, Y_normal, test_size=test_s)
 
-    print(X_normal.describe().transpose())
-    ZTrain, ZTest, y_train, y_test = train_test_split(X_normal, Y_normal, test_size=0.2)
-
-    print(len(ZTrain))
 
     # choix des variables à partir de ZTrain
     YTrain = ZTrain.drop(["ENERGIA1", "HOUR"], axis=1)
@@ -223,7 +242,7 @@ def main():
     ###### START TEST BAM PLOT #########
 
     predM = toDicByFactor(pred1, zh)
-    RV = toDicByFactor(zr,zh)
+    RV = toDicByFactor(zr, zh)
     """
     plt.figure(1)
     plt.subplot(2,1,2)
@@ -237,7 +256,7 @@ def main():
     plt.show()
     """
     plt.figure(2, figsize=(25, 12))
-    #plt.gcf().subplots_adjust(left=0.2, bottom=0.2, right=1.5,
+    # plt.gcf().subplots_adjust(left=0.2, bottom=0.2, right=1.5,
     #                          top=0.9, wspace=0, hspace=0.5)
     # division de la fenêtre graphique en 3 lignes, 1 colonne,
     # graphique en position 1
