@@ -8,6 +8,8 @@ from sklearn.neural_network import MLPClassifier, MLPRegressor
 from sklearn import metrics
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.ensemble import VotingRegressor
+import seaborn as sns
+
 
 
 def minmax_norm(df_input):
@@ -47,7 +49,7 @@ def displayResult(dic, label=""):
     """
     print("\n############### RESULT {} ###############".format(label))
     for key, value in dic.items():
-        print(" - {} : {}".format(key, value))
+        print(" - {} : {}".format(key, value[:3]))
 
 
 def explainResult(dic, exclude=[], desc=[]):
@@ -362,8 +364,8 @@ def RFRTest(X_normal, Y_normal, test_s=0.2):
         reg1.fit(YTrain, YVar)
         pred1 = correctPred(reg1.predict(YTest))
         zr = []
-        for i in range(len(YTRVar)):
-            zr.append(YTRVar.iloc[i])
+        for j in range(len(YTRVar)):
+            zr.append(YTRVar.iloc[j])
         ###### RESULT ######
         res["RandomForestRegressor {}".format(i)] = result(pred1, zr)
 
@@ -373,7 +375,12 @@ def RFRTest(X_normal, Y_normal, test_s=0.2):
 
 def main():
     X_n, Y_n = inputValue("./ALLvalue.csv", varToSet=["ENERGIA1"], exclude=["MONTH", "DAY", "YEAR"],
-                          unNormalized=["ENERGIA1"], min=[1], max=[100])
+                          unNormalized=["ENERGIA1"], min=[1], max=[50])
+    cor = X_n.corr()
+    ax = sns.heatmap(cor, square=True, cmap="coolwarm", linewidths=.5, annot=True)
+    plt.show()
+    print(X_n.shape)
+    print(X_n.describe().transpose())
     #AlgoComparator(X_n, Y_n)
     RFRTest(X_n, Y_n)
 
