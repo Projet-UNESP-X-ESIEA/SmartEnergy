@@ -342,5 +342,41 @@ def AlgoComparator(X_normal, Y_normal, test_s=0.2):
     # print(square_error)
 
 
+def RFRTest(X_normal, Y_normal, test_s=0.2):
+    ZTrain, ZTest, y_train, y_test = train_test_split(X_normal, Y_normal, test_size=test_s)
+    print(len(ZTrain))
+
+    # choix des variables à partir de ZTrain
+    YTrain = ZTrain.drop(["ENERGIA1", "HOUR"], axis=1)
+    YVar = ZTrain["ENERGIA1"]
+    YTest = ZTest.drop(["ENERGIA1", "HOUR"], axis=1)
+    YTRVar = ZTest["ENERGIA1"]
+
+    #
+    # INIT REGRESSOR
+    #
+    res = dict()
+    for i in range(100, 2001, 50):
+        print(" test nb estimator :{}".format(i))
+        reg1 = RandomForestRegressor(n_estimators=i, random_state=0)
+        reg1.fit(YTrain, YVar)
+        pred1 = correctPred(reg1.predict(YTest))
+        zr = []
+        for i in range(len(YTRVar)):
+            zr.append(YTRVar.iloc[i])
+        ###### RESULT ######
+        res["RandomForestRegressor {}".format(i)] = result(pred1, zr)
+
+    er = explainResult(res, desc=["Explained varince score", "r2 score"])
+    displayResult(er)
+
+
+def main():
+    X_n, Y_n = inputValue("./ALLvalue.csv", varToSet=["ENERGIA1"], exclude=["MONTH", "DAY", "YEAR"],
+                          unNormalized=["ENERGIA1"], min=[1], max=[100])
+    #AlgoComparator(X_n, Y_n)
+    RFRTest(X_n, Y_n)
+
+
 if __name__ == '__main__':
     main()
