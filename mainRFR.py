@@ -1,48 +1,31 @@
-from keras.datasets import mnist
-from keras.utils import np_utils
 import pandas
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.cluster import KMeans
-from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.neural_network import MLPClassifier, MLPRegressor
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, f1_score
 from sklearn import metrics
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.ensemble import VotingRegressor
 
 
-def analyseColumn(ptable, pnbX):
-    rep = [0 for _ in range(pnbX)]
-    print(rep)
-    rep[0] = ptable.max()
-    rep[1] = ptable.min()
-    print(rep)
-    return rep
-
-
 def minmax_norm(df_input):
+    """
+    fonction normalisant la database donnée en entrée. Elle normalise tout les valeurs
+    :param df_input: database à normaliser
+    :return: database normalisé
+    """
     return (df_input - df_input.min()) / (df_input.max() - df_input.min())
 
 
-def eval_model(y_true, y_pred, x_nor):
-    # matrice de confusion
-    mc = confusion_matrix(y_true, y_pred)
-    print("Confusion matrix :")
-    print(mc)
-    # taux d'erreur
-    err = 1 - accuracy_score(y_true, y_pred)
-    print("Err-rate = ", err)
-    # F1-score
-    f1 = f1_score(x_nor[3])
-    print("F1-Score = ", f1)
-
-
 def result(pred, Rvalue):
+    """
+    fonction renvoyant un dictionnaire comportant tout les metrics possible sur des predictions
+    :param pred: tableau de prédiction de valeur
+    :param Rvalue: tableau des valeurs réel à comparé à celle predite
+    :return: dictionnaire comportant des metrics
+    """
     return {"Explained varince score": metrics.explained_variance_score(Rvalue, pred),
             "Max error": metrics.max_error(Rvalue, pred),
             "Mean Absolute Error": metrics.mean_absolute_error(Rvalue, pred),
@@ -57,12 +40,24 @@ def result(pred, Rvalue):
 
 
 def displayResult(dic, label=""):
+    """
+    fonction affichant un dictionnaire de maniere simple en spécifiant un titre
+    :param dic: dictionnaire à afficher
+    :param label: titre du dictionnaire
+    """
     print("\n############### RESULT {} ###############".format(label))
     for key, value in dic.items():
         print(" - {} : {}".format(key, value))
 
 
 def explainResult(dic, exclude=[], desc=[]):
+    """
+    fonction classant les differents algorithmes en fonctions de leur score dans les metrics du dictionnaire
+    :param dic: dictionnaire à classer
+    :param exclude: liste des elements à ne pas inclure dans le classement
+    :param desc: liste des element à classer de maniere decroissante (score)
+    :return: dictionnaire avec les algorithmes classé du meilleur au moins bon dans chaque metrics
+    """
     res = {"Explained varince score": [],
            "Max error": [],
            "Mean Absolute Error": [],
@@ -87,6 +82,15 @@ def explainResult(dic, exclude=[], desc=[]):
 
 
 def toDicByFactor(pred, facteur):
+    """
+    fonction renvoyant un dictionnaire de type {X:[,]}. cette fonction va classer par facteur les predictions. Chaque element index I
+    dans le tableau pred appartient à la classe indiqué à la position I du tableau facteur. Ainsi on va regroupé toute les données de
+    même classe dans un dictionnaire repertoriant chaque classe ainsi que les valeurs de cette classe.
+
+    :param pred: tableau à classifier
+    :param facteur: correspondance de classe des elements du tableau pred
+    :return: dictionnaire classifier contenant tout les elements differents du tableau facteur
+    """
     if len(pred) != len(facteur):
         raise Exception("les tableau ne sont pas de même logueur")
     else:
@@ -101,6 +105,11 @@ def toDicByFactor(pred, facteur):
 
 
 def correctPred(pred):
+    """
+    fonction remplacant tout les resultats egal à zero par un float > 0 mais tres petit, ici 0.00000000001
+    :param pred: tableau à une dimension
+    :return: tableau à une dimension avec que des valeurs superieur à 0
+    """
     res = []
     for i in range(len(pred)):
         if pred[i] <= 0:
@@ -108,6 +117,11 @@ def correctPred(pred):
         else:
             res.append(pred[i])
     return res
+
+#TODO: fonction d'export des results
+def toExport(data):
+
+
 
 def main():
     heures_data = pandas.read_table("./ALLvalue.csv", sep=",", header=0, decimal=".")
@@ -118,8 +132,8 @@ def main():
     print(heures_data.describe().transpose())
 
     X = heures_data.drop(["MONTH", "DAY", "YEAR"], axis=1)
-    X = heures_data[X["ENERGIA1"] > 0]
-    X = X[X["ENERGIA1"] < 400]
+    X = X[X["ENERGIA1"] > 0]
+    X = X[X["ENERGIA1"] < 100]
 
     X_normal = minmax_norm(X)
     Y_normal = [i for i in range(X_normal.shape[0])]
