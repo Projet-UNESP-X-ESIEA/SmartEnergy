@@ -370,13 +370,41 @@ def RFRTest(X_normal, Y_normal, test_s=0.2):
     YTest = ZTest.drop(["ENERGIA1", "HOUR"], axis=1)
     YTRVar = ZTest["ENERGIA1"]
 
-    #
-    # INIT REGRESSOR
-    #
+
+    # Create the parameter grid based on the results of random search
+    param_grid = {
+        'bootstrap': [True],
+        'random_state': [3, 5, 8, 10],
+        'max_depth': [80, 90, 100, 110],
+        'max_features': [1, 0.5, 0.2],
+        'min_samples_leaf': [3, 4, 5],
+        'min_samples_split': [8, 10, 12],
+        'n_estimators': [100, 300, 1000, 1400]
+    }
+    # Create a based model
+    rf = RandomForestRegressor()
+    reg1 = RandomForestRegressor(n_estimators=200, random_state=0)
+    reg1.fit(YTrain, YVar)
+    base_accuracy = evaluate(reg1, YTest, YTRVar)
+    # Instantiate the grid search model
+    grid_search = GridSearchCV(estimator=rf, param_grid=param_grid,
+                               cv=3, n_jobs=-1, verbose=2)
+    # Fit the grid search to the data
+    grid_search.fit(YTrain, YVar)
+    bParam = grid_search.best_params_
+    print(bParam)
+    best_grid = grid_search.best_estimator_
+    print(best_grid)
+    grid_accuracy = evaluate(best_grid, YTest, YTRVar)
+    print('Improvement of {:0.2f}%.'.format(100 * (grid_accuracy - base_accuracy) / base_accuracy))
+
+
+
+    """
     res = dict()
     for i in range(100, 2001, 50):
         print(" test nb estimator :{}".format(i))
-        reg1 = RandomForestRegressor(n_estimators=i, random_state=0)
+        reg1 = RandomForestRegressor(n_estimators=i,oob_score=True)
         reg1.fit(YTrain, YVar)
         pred1 = correctPred(reg1.predict(YTest))
         zr = []
@@ -386,12 +414,12 @@ def RFRTest(X_normal, Y_normal, test_s=0.2):
         res["RandomForestRegressor {}".format(i)] = result(pred1, zr)
 
     er = explainResult(res, desc=["Explained varince score", "r2 score"])
-    displayResult(er)
+    displayResult(er)"""
 
 
 def main():
-    X_n, Y_n = inputValue("./ALLvalue.csv", varToSet=["ENERGIA1"], exclude=["MONTH", "DAY", "YEAR"],
-                          unNormalized=["ENERGIA1"], min=[1], max=[50], dblCrit=["ENERGIA1", "TEMPERATURA", "IRRADIACAO"])
+    X_n, Y_n = inputValue("./ALLvalue.csv", varToSet=["ENERGIA1"], exclude=["MONTH", "DAY", "YEAR","CHUVA","UMIDADE","TEMPERATURA"],
+                          unNormalized=["ENERGIA1"], min=[1], max=[50], dblCrit=["ENERGIA1", "IRRADIACAO"])
     cor = X_n.corr()
     ax = sns.heatmap(cor, square=True, cmap="coolwarm", linewidths=.5, annot=True)
     plt.show()
