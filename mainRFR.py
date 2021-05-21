@@ -126,7 +126,7 @@ def toExport(data):
     return None
 
 
-def inputValue(pathFile, varToSet=[], exclude=[], unNormalized=[], verbose=False, min=[], max=[]):
+def inputValue(pathFile, varToSet=[], exclude=[], unNormalized=[], verbose=False, min=[], max=[], dblCrit=[]):
     """
     fonction permettant de créer un dataset panda et de le retourné normalisé en suivant un certain nombre de parametre.
 
@@ -136,6 +136,7 @@ def inputValue(pathFile, varToSet=[], exclude=[], unNormalized=[], verbose=False
     :param verbose: bollean permettant l'affichage de donnée sur le tableau de base
     :param min: selection numérique minimal associer à varToSet avec l'index comme moyen de liaison
     :param max: selection numérique maximal associer à varToSet avec l'index comme moyen de liaison
+    :param dblCrit: selectionne les lignes colonne sur lequel chercher les valeur identique.
     :return: renvoie le dataset comme paramettré et un tableau Yn (index des val du premier tableau)
     """
     if len(varToSet) != len(min) or len(varToSet) != len(max):
@@ -148,6 +149,9 @@ def inputValue(pathFile, varToSet=[], exclude=[], unNormalized=[], verbose=False
         print(heures_data.head())
         print(heures_data.describe().transpose())
     X = heures_data.drop(exclude, axis=1)
+    shapeB = X.shape
+    X = X.drop_duplicates(subset=dblCrit, keep="first")
+    print("sppr duplicate value from {} to {} ".format(shapeB, X.shape))
     for i in range(len(varToSet)):
         X = X[X[varToSet[i]] > min[i]]
         X = X[X[varToSet[i]] < max[i]]
@@ -375,7 +379,7 @@ def RFRTest(X_normal, Y_normal, test_s=0.2):
 
 def main():
     X_n, Y_n = inputValue("./ALLvalue.csv", varToSet=["ENERGIA1"], exclude=["MONTH", "DAY", "YEAR"],
-                          unNormalized=["ENERGIA1"], min=[1], max=[50])
+                          unNormalized=["ENERGIA1"], min=[1], max=[50], dblCrit=["ENERGIA1", "TEMPERATURA", "IRRADIACAO"])
     cor = X_n.corr()
     ax = sns.heatmap(cor, square=True, cmap="coolwarm", linewidths=.5, annot=True)
     plt.show()
