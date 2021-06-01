@@ -1,6 +1,6 @@
 pour un RFR:
     avec les entrée suivante :
-        - IRRADIACAO -> entre 71 et 76 %
+        - IRRADIACAO                                            71 -> 76 %
             {'bootstrap': True, 'max_depth': 4, 'max_features': 1, 'min_samples_leaf': 10, 'min_samples_split': 2, 'n_estimators': 1475, 'random_state': 1}
             Model Performance
             Average Error: 0.8498 degrees.
@@ -14,7 +14,7 @@ pour un RFR:
             Improvement of 2.11%.
 
 
-        - IRRADIACAO, CHUVA
+        - IRRADIACAO, CHUVA                                     71.52%   -> 73.79%
             {'bootstrap': True, 'max_depth': 4, 'max_features': 1, 'min_samples_leaf': 10, 'min_samples_split': 2, 'n_estimators': 1500, 'random_state': 1}
             Model Performance
             Average Error: 0.7741 degrees.
@@ -33,7 +33,7 @@ pour un RFR:
             Accuracy = 73.79%.
             Improvement of 0.37%.
 
-        - IRRADIACAO, CHUVA, HOUR
+        - IRRADIACAO, CHUVA, HOUR                               72.34%    ->    75.61%
             {'bootstrap': True, 'max_depth': 6, 'max_features': 1, 'min_samples_leaf': 6, 'min_samples_split': 2, 'n_estimators': 1500, 'random_state': 3}
             Model Performance
             Average Error: 0.7443 degrees.
@@ -52,7 +52,7 @@ pour un RFR:
             Accuracy = 75.61%.
             Improvement of 8.01%.
 
-        - IRRADIACAO, CHUVA, HOUR, TEMPERATURA
+        - IRRADIACAO, CHUVA, HOUR, TEMPERATURA                  74.02%    ->   76.76%
             {'bootstrap': True, 'max_depth': 8, 'max_features': 1, 'min_samples_leaf': 5, 'min_samples_split': 2, 'n_estimators': 1475, 'random_state': 4}
             Model Performance
             Average Error: 0.7152 degrees.
@@ -83,7 +83,7 @@ pour un RFR:
             Accuracy = 76.13%.
             Improvement of 2.96%.
 
-        - IRRADIACAO, HOUR
+        - IRRADIACAO, HOUR                                      72.78%  -> 75.82%
             {'bootstrap': True, 'max_depth': 5, 'max_features': 1, 'min_samples_leaf': 7, 'min_samples_split': 2, 'n_estimators': 1525, 'random_state': 2}
             Model Performance
             Average Error: 0.7525 degrees.
@@ -102,7 +102,7 @@ pour un RFR:
             Accuracy = 72.78%.
             Improvement of 1.90%.
 
-        - IRRADIACAO, CHUVA, HOUR, TEMPERATURA, UMIDADE
+        - IRRADIACAO, CHUVA, HOUR, TEMPERATURA, UMIDADE         75.83% -> 78.82%
             {'bootstrap': True, 'max_depth': 8, 'max_features': 0.7, 'min_samples_leaf': 6, 'min_samples_split': 2, 'n_estimators': 1475, 'random_state': 4}
             Model Performance
             Average Error: 0.7440 degrees.
@@ -128,7 +128,7 @@ pour un RFR:
             Improvement of 0.15%.
 
 Pour un MLP:
-        - IRRADIACAO -> entre 71 et 76 %
+        - IRRADIACAO
 
         - IRRADIACAO, CHUVA
 
