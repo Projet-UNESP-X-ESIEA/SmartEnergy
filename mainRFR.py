@@ -359,6 +359,26 @@ def AlgoComparator(X_normal, Y_normal, test_s=0.2):
     # square_error = mean_squared_error(predictions, test[target])
     # print(square_error)
 
+def optiRegressor(regressor, gridParam, pYTrain, pYVar, verbose=1):
+    """
+    optiRegressor permet de tester tout les regressors possiblement faisable avec les la grille de parametre
+    :param regressor: le model à tester
+    :param gridParam: les parametres à tester sur le regressor
+    :param pYTrain: les données uttilisé pour la prediction
+    :param pYVar: la valeur associé à la prédiction (valeur à predire)
+    :param verbose: permet de gerer le niveau d'écriture de la fonction GridSearchCV (par default = 1)
+    :return: un objet {best_params, best_grid, grid_search}
+    """
+    # Instantiate the grid search model
+    grid_search = GridSearchCV(estimator=regressor, param_grid=gridParam,
+                               cv=3, n_jobs=-1, verbose=verbose)
+    # Fit the grid search to the data
+    grid_search.fit(pYTrain, pYVar)
+    return {
+        "best_params": grid_search.best_params_,
+        "best_grid": grid_search.best_estimator_,
+        "grid_search": grid_search
+    }
 
 def RFRTest(X_normal, Y_normal, test_s=0.2):
     ZTrain, ZTest, y_train, y_test = train_test_split(X_normal, Y_normal, test_size=test_s)
