@@ -12,15 +12,23 @@ from sklearn.model_selection import GridSearchCV
 import seaborn as sns
 
 
-def evaluate(model, test_features, test_labels):
+def evaluate(model, test_features, test_labels, verbose=1):
+    """
+    fonction d'évaluation de model de prediction
+    :param model: le model de prédiction à évaluer
+    :param test_features: set de donnée pour les prédiction
+    :param test_labels: set de la valeur de comparaison de la prediction
+    :param verbose: permet si = 1 d'afficher la moyenne d'erreur ainsi que la précision
+    :return: la presicion (accuracy) 1 - abs(predictions - test_labels)/test_labels
+    """
     predictions = model.predict(test_features)
     errors = abs(predictions - test_labels)
     mape = 100 * np.mean(errors / test_labels)
     accuracy = 100 - mape
-    print('Model Performance')
-    print('Average Error: {:0.4f} degrees.'.format(np.mean(errors)))
-    print('Accuracy = {:0.2f}%.'.format(accuracy))
-
+    if verbose == 1:
+        print('Model Performance')
+        print('Average Error: {:0.4f} degrees.'.format(np.mean(errors)))
+        print('Accuracy = {:0.2f}%.'.format(accuracy))
     return accuracy
 
 
@@ -444,7 +452,7 @@ def main():
     plt.show()
     print(X_n.shape)
     print(X_n.describe().transpose())
-    #AlgoComparator(X_n, Y_n)
+    # AlgoComparator(X_n, Y_n)
     MLPRTest(X_n, Y_n)
 
 
