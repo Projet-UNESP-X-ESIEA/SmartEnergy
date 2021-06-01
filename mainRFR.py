@@ -1,15 +1,15 @@
-import pandas
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.neural_network import MLPRegressor
+import pandas
+import seaborn as sns
 from sklearn import metrics
 from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import VotingRegressor
+from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import GridSearchCV
-import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.neural_network import MLPRegressor
 
 
 def evaluate(model, test_features, test_labels, verbose=1):
@@ -188,7 +188,6 @@ def inputValue(pathFile, varToSet=[], exclude=[], unNormalized=[], verbose=False
 
 
 def AlgoComparator(X_normal, Y_normal, test_s=0.2):
-
     ZTrain, ZTest, y_train, y_test = train_test_split(X_normal, Y_normal, test_size=test_s)
 
     # choix des variables à partir de ZTrain
