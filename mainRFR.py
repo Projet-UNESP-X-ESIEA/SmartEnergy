@@ -334,7 +334,6 @@ def AlgoComparator(X_normal, Y_normal, test_s=0.2):
     """
 
 
-
 def optiRegressor(regressor, gridParam, pYTrain, pYVar, verbose=1):
     """
     optiRegressor permet de tester tout les regressors possiblement faisable avec les la grille de parametre
@@ -356,16 +355,45 @@ def optiRegressor(regressor, gridParam, pYTrain, pYVar, verbose=1):
         "grid_search": grid_search
     }
 
-def RFRTest(X_normal, Y_normal, test_s=0.2):
+
+def printTestResult(grid_res):
+    """
+    premettant l'affichage des resultats des fonction de test
+    :param grid_res: dictionaire contient differents element affiché par la suite
+    :return: None ( void function)
+    """
+    print(grid_res["best_params"])
+    print(grid_res["best_grid"])
+    print('Improvement of {:0.2f}%.'.format(
+        100 * (grid_res["grid_accuracy"] - grid_res["base_accuracy"]) / grid_res["base_accuracy"]))
+
+
+def dataSetup(X_normal, Y_normal, toPredict, test_s=0.2, verbose=0):
+    """
+    met en forme les données à utiliser pour les models de prediction
+    :param X_normal: dataset à split
+    :param Y_normal: Yn (index des val de X_normal)
+    :param toPredict: variable(s) faisant l'objet de la prediction. Elle est eleve
+    :param test_s: taille du tableau de test
+    :param verbose: permet l'affichade d'information si > 0
+    :return: set d'entrainement, valeur réel à estimer du set d'entrainement, set de test, valeur réel à estimer du set de test
+    """
     ZTrain, ZTest, y_train, y_test = train_test_split(X_normal, Y_normal, test_size=test_s)
-    print(len(ZTrain))
-
+    if verbose > 0:
+        print(len(ZTrain))
     # choix des variables à partir de ZTrain
-    YTrain = ZTrain.drop(["ENERGIA1"], axis=1)
-    YVar = ZTrain["ENERGIA1"]
-    YTest = ZTest.drop(["ENERGIA1"], axis=1)
-    YTRVar = ZTest["ENERGIA1"]
+    return ZTrain.drop([toPredict], axis=1), ZTrain[toPredict], ZTest.drop([toPredict], axis=1), ZTest[toPredict]
 
+
+def RFRTest(X_normal, Y_normal, test_s=0.2):
+    # choix des variables à partir de ZTrain
+    YTrain, YVar, YTest, YTRVar = dataSetup(X_normal, Y_normal, "ENERGIA1", test_s, verbose=1)
+
+    # Create a based model
+    reg1 = RandomForestRegressor(n_estimators=200, random_state=0)
+    reg1.fit(YTrain, YVar)
+
+    # Search an optimal RFR
     # Create the parameter grid based on the results of random search
     param_grid = {
         'bootstrap': [True],
@@ -376,59 +404,36 @@ def RFRTest(X_normal, Y_normal, test_s=0.2):
         'min_samples_split': [2],
         'n_estimators': [1450, 1475, 1500, 1525, 1550]
     }
-    # Create a based model
     rf = RandomForestRegressor()
-    reg1 = RandomForestRegressor(n_estimators=200, random_state=0)
-    reg1.fit(YTrain, YVar)
-    base_accuracy = evaluate(reg1, YTest, YTRVar)
-    # Instantiate the grid search model
-    grid_search = GridSearchCV(estimator=rf, param_grid=param_grid,
-                               cv=3, n_jobs=-1, verbose=1)
-    # Fit the grid search to the data
-    grid_search.fit(YTrain, YVar)
-    bParam = grid_search.best_params_
-    print(bParam)
-    best_grid = grid_search.best_estimator_
-    print(best_grid)
-    grid_accuracy = evaluate(best_grid, YTest, YTRVar)
-    print('Improvement of {:0.2f}%.'.format(100 * (grid_accuracy - base_accuracy) / base_accuracy))
+    res = optiRegressor(rf, param_grid, YTrain, YVar)
+
+    res["grid_accuracy"] = evaluate(res["best_grid"], YTest, YTRVar)
+    res["base_accuracy"] = evaluate(reg1, YTest, YTRVar)
+    printTestResult(res)
+
 
 def MLPRTest(X_normal, Y_normal, test_s=0.2):
-    ZTrain, ZTest, y_train, y_test = train_test_split(X_normal, Y_normal, test_size=test_s)
-    print(len(ZTrain))
-
-    # choix des variables à partir de ZTrain
-    YTrain = ZTrain.drop(["ENERGIA1"], axis=1)
-    YVar = ZTrain["ENERGIA1"]
-    YTest = ZTest.drop(["ENERGIA1"], axis=1)
-    YTRVar = ZTest["ENERGIA1"]
-
+    YTrain, YVar, YTest, YTRVar = dataSetup(X_normal, Y_normal, "ENERGIA1", test_s, verbose=1)
 
     # Create an initial model to compare
     reg1 = MLPRegressor(hidden_layer_sizes=(13, 13, 13), random_state=1)
     reg1.fit(YTrain, YVar)
-    base_accuracy = evaluate(reg1, YTest, YTRVar)
 
-    #earch an optimal MLP
+    # search an optimal MLP
     # Create the parameter grid
     param_grid = {
-        "hidden_layer_sizes": [(13,13,13), (50,50,50)],
+        "hidden_layer_sizes": [(13, 13, 13), (50, 50, 50)],
         "activation": ["identity", "logistic", "tanh", "relu"],
         "solver": ["adam"],
         "alpha": [0.00005, 0.0005],
         "random_state": [1, 2],
-        "max_iter":[2000]
+        "max_iter": [2000]
     }
     rf = MLPRegressor()
     res = optiRegressor(rf, param_grid, YTrain, YVar)
-
-    print(res["best_params"])
-    print(res["best_grid"])
-    grid_accuracy = evaluate(res["best_grid"], YTest, YTRVar)
-    print('Improvement of {:0.2f}%.'.format(100 * (grid_accuracy - base_accuracy) / base_accuracy))
-
-
-
+    res["grid_accuracy"] = evaluate(res["best_grid"], YTest, YTRVar)
+    res["base_accuracy"] = evaluate(reg1, YTest, YTRVar)
+    printTestResult(res)
 
 
 def main():
