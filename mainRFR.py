@@ -417,23 +417,42 @@ def RFRTest(X_normal, Y_normal, test_s=0.2):
     grid_accuracy = evaluate(best_grid, YTest, YTRVar)
     print('Improvement of {:0.2f}%.'.format(100 * (grid_accuracy - base_accuracy) / base_accuracy))
 
+def MLPRTest(X_normal, Y_normal, test_s=0.2):
+    ZTrain, ZTest, y_train, y_test = train_test_split(X_normal, Y_normal, test_size=test_s)
+    print(len(ZTrain))
+
+    # choix des variables à partir de ZTrain
+    YTrain = ZTrain.drop(["ENERGIA1"], axis=1)
+    YVar = ZTrain["ENERGIA1"]
+    YTest = ZTest.drop(["ENERGIA1"], axis=1)
+    YTRVar = ZTest["ENERGIA1"]
 
 
-    """
-    res = dict()
-    for i in range(100, 2001, 50):
-        print(" test nb estimator :{}".format(i))
-        reg1 = RandomForestRegressor(n_estimators=i,oob_score=True)
-        reg1.fit(YTrain, YVar)
-        pred1 = correctPred(reg1.predict(YTest))
-        zr = []
-        for j in range(len(YTRVar)):
-            zr.append(YTRVar.iloc[j])
-        ###### RESULT ######
-        res["RandomForestRegressor {}".format(i)] = result(pred1, zr)
+    # Create an initial model to compare
+    reg1 = MLPRegressor(hidden_layer_sizes=(13, 13, 13), random_state=1)
+    reg1.fit(YTrain, YVar)
+    base_accuracy = evaluate(reg1, YTest, YTRVar)
 
-    er = explainResult(res, desc=["Explained varince score", "r2 score"])
-    displayResult(er)"""
+    #earch an optimal MLP
+    # Create the parameter grid
+    param_grid = {
+        "hidden_layer_sizes": [(13,13,13), (50,50,50)],
+        "activation": ["identity", "logistic", "tanh", "relu"],
+        "solver": ["adam"],
+        "alpha": [0.00005, 0.0005],
+        "random_state": [1, 2],
+        "max_iter":[2000]
+    }
+    rf = MLPRegressor()
+    res = optiRegressor(rf, param_grid, YTrain, YVar)
+
+    print(res["best_params"])
+    print(res["best_grid"])
+    grid_accuracy = evaluate(res["best_grid"], YTest, YTRVar)
+    print('Improvement of {:0.2f}%.'.format(100 * (grid_accuracy - base_accuracy) / base_accuracy))
+
+
+
 
 
 def main():
