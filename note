@@ -1,0 +1,146 @@
+pour un RFR:
+    avec les entrée suivante :
+        - IRRADIACAO -> entre 71 et 76 %
+            {'bootstrap': True, 'max_depth': 4, 'max_features': 1, 'min_samples_leaf': 10, 'min_samples_split': 2, 'n_estimators': 1475, 'random_state': 1}
+            Model Performance
+            Average Error: 0.8498 degrees.
+            Accuracy = 74.03%.
+            Improvement of 5.47%.
+
+            {'bootstrap': True, 'max_depth': 3, 'max_features': 1.9, 'min_samples_leaf': 10, 'min_samples_split': 2, 'n_estimators': 1475, 'random_state': 1}
+            Model Performance
+            Average Error: 0.7591 degrees.
+            Accuracy = 73.34%.
+            Improvement of 2.11%.
+
+
+        - IRRADIACAO, CHUVA
+            {'bootstrap': True, 'max_depth': 4, 'max_features': 1, 'min_samples_leaf': 10, 'min_samples_split': 2, 'n_estimators': 1500, 'random_state': 1}
+            Model Performance
+            Average Error: 0.7741 degrees.
+            Accuracy = 71.52%.
+            Improvement of 3.27%.
+
+            {'bootstrap': True, 'max_depth': 4, 'max_features': 1, 'min_samples_leaf': 10, 'min_samples_split': 2, 'n_estimators': 1500, 'random_state': 2}
+            Model Performance
+            Average Error: 0.7765 degrees.
+            Accuracy = 73.49%.
+            Improvement of 10.42%.
+
+            {'bootstrap': True, 'max_depth': 4, 'max_features': 1, 'min_samples_leaf': 10, 'min_samples_split': 2, 'n_estimators': 1500, 'random_state': 1}
+            Model Performance
+            Average Error: 0.7738 degrees.
+            Accuracy = 73.79%.
+            Improvement of 0.37%.
+
+        - IRRADIACAO, CHUVA, HOUR
+            {'bootstrap': True, 'max_depth': 6, 'max_features': 1, 'min_samples_leaf': 6, 'min_samples_split': 2, 'n_estimators': 1500, 'random_state': 3}
+            Model Performance
+            Average Error: 0.7443 degrees.
+            Accuracy = 72.34%.
+            Improvement of 1.73%.
+
+            {'bootstrap': True, 'max_depth': 7, 'max_features': 1, 'min_samples_leaf': 7, 'min_samples_split': 2, 'n_estimators': 1475, 'random_state': 2}
+            Model Performance
+            Average Error: 0.6966 degrees.
+            Accuracy = 75.05%.
+            Improvement of 12.94%.
+
+            {'bootstrap': True, 'max_depth': 7, 'max_features': 1, 'min_samples_leaf': 6, 'min_samples_split': 2, 'n_estimators': 1475, 'random_state': 3}
+            Model Performance
+            Average Error: 0.7797 degrees.
+            Accuracy = 75.61%.
+            Improvement of 8.01%.
+
+        - IRRADIACAO, CHUVA, HOUR, TEMPERATURA
+            {'bootstrap': True, 'max_depth': 8, 'max_features': 1, 'min_samples_leaf': 5, 'min_samples_split': 2, 'n_estimators': 1475, 'random_state': 4}
+            Model Performance
+            Average Error: 0.7152 degrees.
+            Accuracy = 74.02%.
+            Improvement of -3.51%.
+
+            {'bootstrap': True, 'max_depth': 7, 'max_features': 0.5, 'min_samples_leaf': 6, 'min_samples_split': 2, 'n_estimators': 1475, 'random_state': 5}
+            Model Performance
+            Average Error: 0.7628 degrees.
+            Accuracy = 76.76%.
+            Improvement of -0.36%.
+
+            {'bootstrap': True, 'max_depth': 7, 'max_features': 0.5, 'min_samples_leaf': 6, 'min_samples_split': 2, 'n_estimators': 1450, 'random_state': 4}
+            Model Performance
+            Average Error: 0.6965 degrees.
+            Accuracy = 76.30%.
+            Improvement of 2.26%.
+
+            {'bootstrap': True, 'max_depth': 8, 'max_features': 0.6, 'min_samples_leaf': 5, 'min_samples_split': 2, 'n_estimators': 1475, 'random_state': 5}
+            Model Performance
+            Average Error: 0.7688 degrees.
+            Accuracy = 76.26%.
+            Improvement of 2.43%.
+
+            {'bootstrap': True, 'max_depth': 7, 'max_features': 0.7, 'min_samples_leaf': 5, 'min_samples_split': 2, 'n_estimators': 1450, 'random_state': 5}
+            Model Performance
+            Average Error: 0.7826 degrees.
+            Accuracy = 76.13%.
+            Improvement of 2.96%.
+
+        - IRRADIACAO, HOUR
+            {'bootstrap': True, 'max_depth': 5, 'max_features': 1, 'min_samples_leaf': 7, 'min_samples_split': 2, 'n_estimators': 1525, 'random_state': 2}
+            Model Performance
+            Average Error: 0.7525 degrees.
+            Accuracy = 75.82%.
+            Improvement of 1.22%.
+
+            {'bootstrap': True, 'max_depth': 5, 'max_features': 1, 'min_samples_leaf': 7, 'min_samples_split': 2, 'n_estimators': 1525, 'random_state': 3}
+            Model Performance
+            Average Error: 0.7231 degrees.
+            Accuracy = 73.30%.
+            Improvement of 2.96%.
+
+            {'bootstrap': True, 'max_depth': 5, 'max_features': 1, 'min_samples_leaf': 6, 'min_samples_split': 2, 'n_estimators': 1525, 'random_state': 3}
+            Model Performance
+            Average Error: 0.7109 degrees.
+            Accuracy = 72.78%.
+            Improvement of 1.90%.
+
+        - IRRADIACAO, CHUVA, HOUR, TEMPERATURA, UMIDADE
+            {'bootstrap': True, 'max_depth': 8, 'max_features': 0.7, 'min_samples_leaf': 6, 'min_samples_split': 2, 'n_estimators': 1475, 'random_state': 4}
+            Model Performance
+            Average Error: 0.7440 degrees.
+            Accuracy = 78.50%.
+            Improvement of 1.13%.
+
+            {'bootstrap': True, 'max_depth': 7, 'max_features': 0.7, 'min_samples_leaf': 5, 'min_samples_split': 2, 'n_estimators': 1500, 'random_state': 4}
+            Model Performance
+            Average Error: 0.8536 degrees.
+            Accuracy = 75.83%.
+            Improvement of 1.65%.
+
+            {'bootstrap': True, 'max_depth': 7, 'max_features': 0.7, 'min_samples_leaf': 6, 'min_samples_split': 2, 'n_estimators': 1475, 'random_state': 4}
+            Model Performance
+            Average Error: 0.7247 degrees.
+            Accuracy = 76.78%.
+            Improvement of 1.49%.
+
+            {'bootstrap': True, 'max_depth': 6, 'max_features': 0.65, 'min_samples_leaf': 6, 'min_samples_split': 2, 'n_estimators': 1450, 'random_state': 5}
+            Model Performance
+            Average Error: 0.7410 degrees.
+            Accuracy = 78.82%.
+            Improvement of 0.15%.
+
+Pour un MLP:
+        - IRRADIACAO -> entre 71 et 76 %
+
+        - IRRADIACAO, CHUVA
+
+        - IRRADIACAO, CHUVA, HOUR
+
+        - IRRADIACAO, CHUVA, HOUR, TEMPERATURA
+
+        - IRRADIACAO, HOUR
+
+        - IRRADIACAO, CHUVA, HOUR, TEMPERATURA, UMIDADE
+
+
+
+
+
