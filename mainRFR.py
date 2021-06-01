@@ -183,7 +183,6 @@ def AlgoComparator(X_normal, Y_normal, test_s=0.2):
 
     ZTrain, ZTest, y_train, y_test = train_test_split(X_normal, Y_normal, test_size=test_s)
 
-
     # choix des variables à partir de ZTrain
     YTrain = ZTrain.drop(["ENERGIA1", "HOUR"], axis=1)
     YVar = ZTrain["ENERGIA1"]
@@ -319,6 +318,9 @@ def AlgoComparator(X_normal, Y_normal, test_s=0.2):
 
     plt.savefig('test.png', dpi=300)
 
+    #
+    # SAVE TO CSV
+    #
     pred = pandas.Series(pred1, name="prediction", index=YTRVar)
     pred.to_csv("JSP.csv")
     
@@ -331,33 +333,7 @@ def AlgoComparator(X_normal, Y_normal, test_s=0.2):
     allTab.to_csv("testPredAll.csv")
     """
 
-    """"
-    X_train, X_test, y_train, y_test = train_test_split(X_normal, Y_normal)
-    y_train = y_train.astype('float64')
-    y_test = y_test.astype('float64')
-    scaler = StandardScaler()
-    scaler.fit(X_train)
 
-    X_train = scaler.transform(X_train)
-    X_test = scaler.transform(X_test)
-
-
-
-    mlp = MLPClassifier(hidden_layer_sizes=(13, 13, 13), max_iter=1000)
-    sortie = mlp.fit(X_train, y_train)
-    print(sortie)
-    predictions = mlp.predict(X_test)
-    print(confusion_matrix(y_test,predictions))
-    print(classification_report(y_test, predictions))
-
-    """
-    ###
-    # model = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1)
-    # model.fit(train[columns], train[target])
-
-    # predictions = model.predict(test[columns])
-    # square_error = mean_squared_error(predictions, test[target])
-    # print(square_error)
 
 def optiRegressor(regressor, gridParam, pYTrain, pYVar, verbose=1):
     """
