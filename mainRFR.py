@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas
+import statistics
 import seaborn as sns
 from sklearn import metrics
 from sklearn.ensemble import GradientBoostingRegressor
@@ -191,9 +192,9 @@ def AlgoComparator(X_normal, Y_normal, test_s=0.2):
     ZTrain, ZTest, y_train, y_test = train_test_split(X_normal, Y_normal, test_size=test_s)
 
     # choix des variables à partir de ZTrain
-    YTrain = ZTrain.drop(["ENERGIA1", "HOUR"], axis=1)
+    YTrain = ZTrain.drop(["ENERGIA1"], axis=1)
     YVar = ZTrain["ENERGIA1"]
-    YTest = ZTest.drop(["ENERGIA1", "HOUR"], axis=1)
+    YTest = ZTest.drop(["ENERGIA1"], axis=1)
     YTRVar = ZTest["ENERGIA1"]
 
     #
@@ -205,7 +206,7 @@ def AlgoComparator(X_normal, Y_normal, test_s=0.2):
     reg0.fit(YTrain, YVar)
 
     # RANDOM FOREST
-    reg1 = RandomForestRegressor(n_estimators=200, random_state=0)
+    reg1 = RandomForestRegressor(bootstrap=True, max_depth=6, max_features=0.65, min_samples_leaf=6, min_samples_split=2, n_estimators=1450, random_state=5)
     reg1.fit(YTrain, YVar)
 
     # GRADIENT BOOSTING REGRESSOR
@@ -230,7 +231,7 @@ def AlgoComparator(X_normal, Y_normal, test_s=0.2):
     pred4 = correctPred(ereg.predict(YTest))
     zr = []
     zh = []
-    for i in range(1006):
+    for i in range(len(pred0)):
         zr.append(YTRVar.iloc[i])
         zh.append(ZTest["HOUR"].iloc[i])
 
@@ -265,8 +266,44 @@ def AlgoComparator(X_normal, Y_normal, test_s=0.2):
     ######  END PLOT  #####
     ###### START TEST BAM PLOT #########
 
+    predA = toDicByFactor(pred0, zh)
     predM = toDicByFactor(pred1, zh)
     RV = toDicByFactor(zr, zh)
+
+    #### START MEANS ####
+    i = 0
+    RVM = []
+    predMM = []
+    predAM = []
+    y = []
+    for key, value in RV.items():
+        RVM.append(statistics.mean(value))
+    for key, value in predM.items():
+        predMM.append(statistics.mean(value))
+    for key, value in predA.items():
+        predAM.append(statistics.mean(value))
+    for key, value in RV.items():
+        y.append(key)
+    y.sort()
+    del y[0]
+    del RVM[0]
+    del predMM[0]
+    del predAM[0]
+    print(RVM)
+    print(predMM)
+
+    plt.figure()
+    plt.plot(y, RVM, label='real value')
+    plt.plot(y, predMM, label='RandomForestRegressor prediction')
+    plt.plot(y, predAM, label='Multi-layer perceptron prediction')
+    plt.ylabel('energie production')
+    plt.xlabel('hour')
+    plt.legend(loc="best")
+    plt.title('Regressor predictions and the real production')
+
+    plt.show()
+    #### END MEANS ####
+
     """
     plt.figure(1)
     plt.subplot(2,1,2)
@@ -278,7 +315,7 @@ def AlgoComparator(X_normal, Y_normal, test_s=0.2):
     plt.legend(loc="best")
     plt.title('RandomForestRegressor predictions and their average')
     plt.show()
-    """
+    
     plt.figure(2, figsize=(25, 12))
     # plt.gcf().subplots_adjust(left=0.2, bottom=0.2, right=1.5,
     #                          top=0.9, wspace=0, hspace=0.5)
@@ -309,7 +346,7 @@ def AlgoComparator(X_normal, Y_normal, test_s=0.2):
 
     ######  END TEST BAM PLOT  #########
 
-    """
+    
     ZTETT = ZTest
     # print(predm_sklearn)
     # print(pmc_sklearn.score(ZTest, ZTETT[3]))
@@ -451,8 +488,8 @@ def main():
     plt.show()
     print(X_n.shape)
     print(X_n.describe().transpose())
-    # AlgoComparator(X_n, Y_n)
-    MLPRTest(X_n, Y_n)
+    AlgoComparator(X_n, Y_n)
+    # MLPRTest(X_n, Y_n)
 
 
 if __name__ == '__main__':
